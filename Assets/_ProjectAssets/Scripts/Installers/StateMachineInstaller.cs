@@ -1,6 +1,5 @@
 using _ProjectAssets.Scripts.FSM;
 using _ProjectAssets.Scripts.FSM.Game_States;
-using _ProjectAssets.Scripts.Game_States;
 using Zenject;
 
 namespace _ProjectAssets.Scripts.Installers

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using _ProjectAssets.Scripts.Game_States;
+using _ProjectAssets.Scripts.Structures;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -19,10 +20,10 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             _fsm = fsm;
         }
         
-        public override void Enter()
+        public override async void Enter()
         {
             GenerateElements();
-            CalculateDropOrder();
+            await CalculateDropOrder();
             SetNextState();
         }
 
@@ -58,7 +59,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             return true;
         }
 
-        private void CalculateDropOrder()
+        private async UniTask CalculateDropOrder()
         {
             if (_gridView.ColumnsAmount != _gridView.MatchElements.GetLength(1))
             {
@@ -91,7 +92,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     rowOfShuffledElements.Add(currentDropTicket);
                 }
                 
-                _gridView.AnimateDrop(rowOfShuffledElements);
+                await _gridView.AnimateDrop(rowOfShuffledElements);
                 rowOfShuffledElements.Clear();
             }
         }

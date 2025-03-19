@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using _ProjectAssets.Scripts;
-using _ProjectAssets.Scripts.Instances;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 using Random = System.Random;
+using _ProjectAssets.Scripts;
+using _ProjectAssets.Scripts.Instances;
+using _ProjectAssets.Scripts.Structures;
 
 public enum ElementColor
 {
@@ -14,24 +13,6 @@ public enum ElementColor
     Blue,
     Green,
     Yellow
-}
-
-public struct ElementDropTicket
-{
-    public MatchElement MatchElement;
-    public ArrayPositionData ArrayPosition;
-}
-
-public struct ArrayPositionData
-{
-    public int RowIndex;
-    public int ColumnIndex;
-
-    public ArrayPositionData(int rowIndex, int columnIndex)
-    {
-        RowIndex = rowIndex;
-        ColumnIndex = columnIndex;
-    }
 }
 
 public class GridView : MonoBehaviour
@@ -81,17 +62,27 @@ public class GridView : MonoBehaviour
         _dropAnimRnd = new Random();
     }
 
-    public void AnimateDrop(List<ElementDropTicket> rowOfShuffledElements)
+    public async UniTask AnimateDrop(List<ElementDropTicket> rowOfShuffledElements)
     {
-        float resultingDuration = 0f;
+        
+        List<UniTask> animateTasks = new List<UniTask>();
         foreach (var element in rowOfShuffledElements)
         {
             
             element.MatchElement.transform.SetParent(_targetSpotsArray[element.ArrayPosition.RowIndex, element.ArrayPosition.ColumnIndex].transform);
-            
-            resultingDuration = _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f;
-            element.MatchElement.transform.DOLocalMove(Vector3.zero, resultingDuration).SetEase(Ease.InCubic);
+
+            animateTasks.Add(AnimateElementDrop(element));
         }
+        
+        await UniTask.WhenAll(animateTasks);
+    }
+
+    private async UniTask AnimateElementDrop(ElementDropTicket element)
+    {
+        await element.MatchElement.transform.DOLocalMove(Vector3.zero, _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f)
+            .SetEase(Ease.InCubic)
+            .AsyncWaitForCompletion()
+            .AsUniTask();
     }
 
     public void Swap()

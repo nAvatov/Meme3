@@ -1,23 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
-using _ProjectAssets.Scripts.FSM;
-using _ProjectAssets.Scripts.Instances;
+using _ProjectAssets.Scripts.FSM.States_Infrastructure;
+using _ProjectAssets.Scripts.Structures;
 using UnityEngine;
 using Zenject;
 
-namespace _ProjectAssets.Scripts.Game_States
+namespace _ProjectAssets.Scripts.FSM.Game_States
 {
     public class CheckMatchesState : GameState
     {
 
         private GridView _gridView;
         private FSMachine _fsm;
+        private StateTransitionContext _transitionContext;
 
         [Inject]
-        public void Construct(GridView gridView, FSMachine fsm)
+        public void Construct(GridView gridView, FSMachine fsm, StateTransitionContext transitionContext)
         {
             _gridView = gridView;
             _fsm = fsm;
+            _transitionContext = transitionContext;
         }
 
         public override void Enter()
@@ -66,34 +68,10 @@ namespace _ProjectAssets.Scripts.Game_States
 
             verticalMatchesList = verticalMatchesList.Where(match => match.Count > 2).ToList();
             horizontalMatchesList = horizontalMatchesList.Where(match => match.Count > 2).ToList();
-            DebugMatchCheck(verticalMatchesList, horizontalMatchesList);
+            
+            _transitionContext.SetMatches(verticalMatchesList, horizontalMatchesList);
 
             return verticalMatchesList.Count > 0 && horizontalMatchesList.Count > 0;
-        }
-
-        private void DebugMatchCheck(List<List<ArrayPositionData>> vertical, List<List<ArrayPositionData>> horizontal)
-        {
-            foreach (var match in vertical)
-            {
-                if (match.Count > 2)
-                {
-                    foreach (var element in match)
-                    {
-                        _gridView.MatchElements[element.RowIndex, element.ColumnIndex].Explode();
-                    }
-                }
-            }
-            
-            foreach (var match in horizontal)
-            {
-                if (match.Count > 2)
-                {
-                    foreach (var element in match)
-                    {
-                        _gridView.MatchElements[element.RowIndex, element.ColumnIndex].Explode();
-                    }
-                }
-            }
         }
 
         private bool IsElementWasIncludedInMatchBefore(List<List<ArrayPositionData>> matchesList, int i, int j)
