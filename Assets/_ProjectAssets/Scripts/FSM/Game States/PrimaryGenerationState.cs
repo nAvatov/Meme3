@@ -84,8 +84,9 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     }
                     
                     currentDropTicket = new ElementDropTicket();
-                    currentDropTicket.ColumnIndex = randomColumnIndex;
-                    currentDropTicket.RowIndex = i;
+                    currentDropTicket.ArrayPosition = new ArrayPositionData();
+                    currentDropTicket.ArrayPosition.ColumnIndex = randomColumnIndex;
+                    currentDropTicket.ArrayPosition.RowIndex = i;
                     currentDropTicket.MatchElement = _gridView.MatchElements[i, randomColumnIndex];
                     rowOfShuffledElements.Add(currentDropTicket);
                 }

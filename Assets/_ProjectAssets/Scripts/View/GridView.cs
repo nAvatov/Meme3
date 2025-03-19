@@ -19,8 +19,19 @@ public enum ElementColor
 public struct ElementDropTicket
 {
     public MatchElement MatchElement;
+    public ArrayPositionData ArrayPosition;
+}
+
+public struct ArrayPositionData
+{
     public int RowIndex;
     public int ColumnIndex;
+
+    public ArrayPositionData(int rowIndex, int columnIndex)
+    {
+        RowIndex = rowIndex;
+        ColumnIndex = columnIndex;
+    }
 }
 
 public class GridView : MonoBehaviour
@@ -76,7 +87,7 @@ public class GridView : MonoBehaviour
         foreach (var element in rowOfShuffledElements)
         {
             
-            element.MatchElement.transform.SetParent(_targetSpotsArray[element.RowIndex, element.ColumnIndex].transform);
+            element.MatchElement.transform.SetParent(_targetSpotsArray[element.ArrayPosition.RowIndex, element.ArrayPosition.ColumnIndex].transform);
             
             resultingDuration = _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f;
             element.MatchElement.transform.DOLocalMove(Vector3.zero, resultingDuration).SetEase(Ease.InCubic);

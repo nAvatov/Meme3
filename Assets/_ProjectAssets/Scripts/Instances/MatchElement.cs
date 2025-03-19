@@ -1,29 +1,30 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace _ProjectAssets.Scripts.Instances
 {
     public class MatchElement : MonoBehaviour
     {
         [SerializeField] private Image _image;
-        private ElementColor _color;
+        [SerializeField] private Image _background;
+        private ElementColor _elementType;
+
+        public ElementColor ElementType => _elementType;
 
         public void SetColor(ElementColor color)
         {
-            _color = color;
+            _elementType = color;
             _image.color = DecideColor();
         }
 
         public void Explode()
         {
-        
+            _background.color = new Color(0, 0, 0, 1);
         }
 
         private Color DecideColor()
         {
-            return _color switch
+            return _elementType switch
             {
                 ElementColor.Red => Color.red,
                 ElementColor.Blue => Color.blue,
