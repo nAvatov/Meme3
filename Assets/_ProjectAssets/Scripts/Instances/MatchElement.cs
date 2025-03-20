@@ -1,3 +1,6 @@
+using _ProjectAssets.Scripts.View;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,31 +10,37 @@ namespace _ProjectAssets.Scripts.Instances
     {
         [SerializeField] private Image _image;
         [SerializeField] private Image _background;
-        private ElementColor _elementType;
+        private ElementType _elementType;
 
-        public ElementColor ElementType => _elementType;
+        public ElementType ElementType => _elementType;
 
-        public void SetColor(ElementColor color)
+        public void SetColor(ElementType type)
         {
-            _elementType = color;
+            _elementType = type;
             _image.color = DecideColor();
         }
 
         public void Explode()
         {
-            _background.color = new Color(0, 0, 0, 1);
+            //_background.color = new Color(0, 0, 0, 1);
         }
+        
 
         private Color DecideColor()
         {
             return _elementType switch
             {
-                ElementColor.Red => Color.red,
-                ElementColor.Blue => Color.blue,
-                ElementColor.Green => Color.green,
-                ElementColor.Yellow => Color.yellow,
+                ElementType.Red => Color.red,
+                ElementType.Blue => Color.blue,
+                ElementType.Green => Color.green,
+                ElementType.Yellow => Color.yellow,
                 _ => Color.white
             };
+        }
+
+        public async UniTask Shake()
+        {
+            await gameObject.transform.DOShakeRotation(3f, new Vector3(0, 0, 1)).AsyncWaitForCompletion().AsUniTask();
         }
     }
 }

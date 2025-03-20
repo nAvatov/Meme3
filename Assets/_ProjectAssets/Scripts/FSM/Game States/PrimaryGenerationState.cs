@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _ProjectAssets.Scripts.Structures;
+using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -24,20 +25,14 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         {
             GenerateElements();
             await CalculateDropOrder();
-            SetNextState();
-        }
-
-        public override void SetNextState()
-        {
             _fsm.ChangeState<CheckMatchesState>();
         }
 
-
         private void GenerateElements()
         {
-            ElementColor[,] generation = new ElementColor[_gridView.RowsAmount, _gridView.ColumnsAmount];
+            ElementType[,] generation = new ElementType[_gridView.RowsAmount, _gridView.ColumnsAmount];
             _generationRnd = new System.Random();
-            int upperRandomBound = Enum.GetValues(typeof(ElementColor)).Length;
+            int upperRandomBound = Enum.GetValues(typeof(ElementType)).Length;
 
             do
             {
@@ -45,8 +40,8 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 {
                     for (int j = 0; j < generation.GetLength(1); j++)
                     {
-                        generation[i, j] = new ElementColor();
-                        generation[i, j] = (ElementColor)_generationRnd.Next(0, upperRandomBound);
+                        generation[i, j] = new ElementType();
+                        generation[i, j] = (ElementType)_generationRnd.Next(0, upperRandomBound);
                     }
                 }
             } while (!CheckGenerationValidity());
@@ -92,7 +87,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     rowOfShuffledElements.Add(currentDropTicket);
                 }
                 
-                await _gridView.AnimateDrop(rowOfShuffledElements);
+                await _gridView.AnimateInitialDrop(rowOfShuffledElements);
                 rowOfShuffledElements.Clear();
             }
         }

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using _ProjectAssets.Scripts.FSM.States_Infrastructure;
 using _ProjectAssets.Scripts.Structures;
+using _ProjectAssets.Scripts.View;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +11,6 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 {
     public class CheckMatchesState : GameState
     {
-
         private GridView _gridView;
         private FSMachine _fsm;
         private StateTransitionContext _transitionContext;
@@ -22,11 +23,13 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             _transitionContext = transitionContext;
         }
 
-        public override void Enter()
+        public override async void Enter()
         {
-            if (IsMatchFound())
+            var foundMatches = await IsMatchFound();
+            if (foundMatches)
             {
                 Debug.Log("Matches found!");
+                
                 _fsm.ChangeState<DestroyMatchedElementsState>();
             }
             else
@@ -35,17 +38,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             }
         }
 
-        public override void Exit()
-        {
-
-        }
-
-        public override void SetNextState()
-        {
-
-        }
-
-        private bool IsMatchFound()
+        private async UniTask<bool> IsMatchFound()
         {
             List<List<ArrayPositionData>> verticalMatchesList = new List<List<ArrayPositionData>>();
             List<List<ArrayPositionData>> horizontalMatchesList = new List<List<ArrayPositionData>>();
@@ -70,8 +63,35 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             horizontalMatchesList = horizontalMatchesList.Where(match => match.Count > 2).ToList();
             
             _transitionContext.SetMatches(verticalMatchesList, horizontalMatchesList);
+            Debug.Log(verticalMatchesList.Count);
+            Debug.Log(horizontalMatchesList.Count);
+            
+            await ShakeFoundMatches(verticalMatchesList, horizontalMatchesList);
 
-            return verticalMatchesList.Count > 0 && horizontalMatchesList.Count > 0;
+            return verticalMatchesList.Count > 0 || horizontalMatchesList.Count > 0;
+        }
+
+        private async UniTask ShakeFoundMatches(List<List<ArrayPositionData>> vertical, List<List<ArrayPositionData>> horizontal)
+        {
+            List<UniTask> shakeTasks = new List<UniTask>();
+            
+            foreach (var match in vertical)
+            {
+                foreach (var element in match)
+                {
+                    shakeTasks.Add(_gridView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
+                }
+            }
+
+            foreach (var match in horizontal)
+            {
+                foreach (var element in match)
+                {
+                    shakeTasks.Add(_gridView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
+                }
+            }
+
+            await UniTask.WhenAll(shakeTasks);
         }
 
         private bool IsElementWasIncludedInMatchBefore(List<List<ArrayPositionData>> matchesList, int i, int j)
@@ -81,7 +101,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private List<ArrayPositionData> CheckMatchFigureHorizontal(int i, int j)
         {
-            ElementColor elementColor = _gridView.MatchElements[i, j].ElementType;
+            ElementType elementType = _gridView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();
             matchedElements.Add(new ArrayPositionData(i, j));
             // left
@@ -89,7 +109,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = j - 1; k >= 0; k--)
                 {
-                    if (_gridView.MatchElements[i, k].ElementType != elementColor)
+                    if (_gridView.MatchElements[i, k].ElementType != elementType)
                     {
                         break;
                     }
@@ -103,7 +123,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = j + 1; k <= _gridView.MatchElements.GetLength(1) - 1; k++)
                 {
-                    if (_gridView.MatchElements[i, k].ElementType != elementColor)
+                    if (_gridView.MatchElements[i, k].ElementType != elementType)
                     {
                         break;
                     }
@@ -117,7 +137,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private List<ArrayPositionData> CheckMatchFigureVertical(int i, int j)
         {
-            ElementColor elementColor = _gridView.MatchElements[i, j].ElementType;
+            ElementType elementType = _gridView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();
             matchedElements.Add(new ArrayPositionData(i, j));
             // up
@@ -125,7 +145,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = i - 1; k >= 0; k--)
                 {
-                    if (_gridView.MatchElements[k, j].ElementType != elementColor)
+                    if (_gridView.MatchElements[k, j].ElementType != elementType)
                     {
                         break;
                     }
@@ -139,7 +159,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = i + 1; k <= _gridView.MatchElements.GetLength(0) - 1; k++)
                 {
-                    if (_gridView.MatchElements[k, j].ElementType != elementColor)
+                    if (_gridView.MatchElements[k, j].ElementType != elementType)
                     {
                         break;
                     }

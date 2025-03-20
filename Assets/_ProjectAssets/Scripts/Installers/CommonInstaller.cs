@@ -1,3 +1,4 @@
+using _ProjectAssets.Scripts.View;
 using UnityEngine;
 using Zenject;
 
