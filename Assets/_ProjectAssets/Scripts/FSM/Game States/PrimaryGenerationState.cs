@@ -15,10 +15,11 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         private System.Random _generationRnd;
         
         [Inject]
-        public void Construct(GridView gridView, FSMachine fsm)
+        public void Construct(GridView gridView, FSMachine fsm, System.Random generationRnd)
         {
             _gridView = gridView;
             _fsm = fsm;
+            _generationRnd = generationRnd;
         }
         
         public override async void Enter()
@@ -31,7 +32,6 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         private void GenerateElements()
         {
             ElementType[,] generation = new ElementType[_gridView.RowsAmount, _gridView.ColumnsAmount];
-            _generationRnd = new System.Random();
             int upperRandomBound = Enum.GetValues(typeof(ElementType)).Length;
 
             do

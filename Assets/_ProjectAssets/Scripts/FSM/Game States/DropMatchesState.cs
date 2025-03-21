@@ -44,12 +44,12 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     {
                         currentElementPosData.ColumnIndex = j;
                         currentElementPosData.RowIndex = i;
-                        await _gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow);
+                        dropTasks.Add( _gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow));
                     }
                 }
             }
             
-            //await UniTask.WhenAll(dropTasks);
+            await UniTask.WhenAll(dropTasks);
         }
 
         private async UniTask DropNewElementsToEmptyPositions()
@@ -71,7 +71,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
                     currentElementPosData.RowIndex = i;
                     currentElementPosData.ColumnIndex = j;
-                    await _gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow, false);
+                    dropTasks.Add(_gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow, false));
                 }
             }
             

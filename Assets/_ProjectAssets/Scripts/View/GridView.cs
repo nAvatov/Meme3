@@ -49,7 +49,7 @@ namespace _ProjectAssets.Scripts.View
                     for (int j = 0; j < elementsMatrix.GetLength(1); j++)
                     {
                         _matchElements[i, j] = Instantiate(_matchElementPrefab, _spawnSpots[k].transform);
-                        _matchElements[i, j].SetColor(elementsMatrix[i, j]);
+                        _matchElements[i, j].SetElementType(elementsMatrix[i, j]);
                         k++;
                     }
                 }
@@ -82,7 +82,7 @@ namespace _ProjectAssets.Scripts.View
                 _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
                 _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
                 
-                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex], true);
+                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             }
             else
             {
@@ -90,28 +90,33 @@ namespace _ProjectAssets.Scripts.View
                 _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
                 _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
                 
-                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex], true);
+                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             }
         }
 
-        public void ReturnElementToSpawnPoint(int i, int j)
+        public void ReturnElementToSpawnPoint(int i, int j, ElementType newElementType)
         {
             if (SpawnSpotsArray == null)
             {
                 SpawnSpotsArray = CollectionWrapper.WrapListToTwoDimArray(_spawnSpots, _fieldColumns);
             }
-        
+
             _matchElements[i, j].transform.SetParent(SpawnSpotsArray[i, j].transform);
-            SpawnSpotsArray[i, j] = _matchElements[i, j].gameObject;
-            SpawnSpotsArray[i, j].transform.localPosition = Vector3.zero;
+            _matchElements[i, j].transform.localPosition = Vector3.zero;
             _reservedElements[i, j] = _matchElements[i, j];
+            _reservedElements[i, j].SetElementType(newElementType);
             _matchElements[i, j] = null;
         }
 
-        private async UniTask AnimateElementDrop(MatchElement element, bool slow = false)
+        private async UniTask AnimateElementDrop(MatchElement element)
         {
-            await element.transform.DOLocalMove(Vector3.zero, _dropAnimRnd.Next(_dropDurationLowerBound, slow ? _dropDurationUpperBound + 10 : _dropDurationUpperBound) / 10f)
-                .SetEase(Ease.Linear)
+            await element.transform.DOLocalMove(Vector3.zero, _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f)
+                .SetEase(Ease.InCubic)
+                .OnComplete(() =>
+                {
+                    element.transform.localPosition = Vector3.zero;
+                    element.transform.DOKill();
+                })
                 .AsyncWaitForCompletion()
                 .AsUniTask();
         }

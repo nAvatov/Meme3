@@ -9874,7 +9874,7 @@ MonoBehaviour:
   - {fileID: 1187852737}
   _matchElementPrefab: {fileID: 7587919010358211285, guid: de090679c43297d4ba4d902087ebb118, type: 3}
   _dropDurationLowerBound: 1
-  _dropDurationUpperBound: 5
+  _dropDurationUpperBound: 3
 --- !u!1001 &1745286203
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -63,8 +63,8 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             horizontalMatchesList = horizontalMatchesList.Where(match => match.Count > 2).ToList();
             
             _transitionContext.SetMatches(verticalMatchesList, horizontalMatchesList);
-            Debug.Log(verticalMatchesList.Count);
-            Debug.Log(horizontalMatchesList.Count);
+            Debug.Log("Vertical matches amount: " + verticalMatchesList.Count);
+            Debug.Log("Horizontal matches amount: " +horizontalMatchesList.Count);
             
             await ShakeFoundMatches(verticalMatchesList, horizontalMatchesList);
 

@@ -1,6 +1,8 @@
+using System;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +16,7 @@ namespace _ProjectAssets.Scripts.Instances
 
         public ElementType ElementType => _elementType;
 
-        public void SetColor(ElementType type)
+        public void SetElementType(ElementType type)
         {
             _elementType = type;
             _image.color = DecideColor();
@@ -40,7 +42,14 @@ namespace _ProjectAssets.Scripts.Instances
 
         public async UniTask Shake()
         {
-            await gameObject.transform.DOShakeRotation(3f, new Vector3(0, 0, 1)).AsyncWaitForCompletion().AsUniTask();
+            await gameObject.transform.DOShakeRotation(1f, new Vector3(0, 0, 25), 50, 90f, true)
+                .OnComplete(() =>
+                {
+                    gameObject.transform.rotation = quaternion.identity;
+                    gameObject.transform.DOKill();
+                })
+                .AsyncWaitForCompletion()
+                .AsUniTask();
         }
     }
 }

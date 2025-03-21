@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _ProjectAssets.Scripts.FSM.States_Infrastructure;
 using _ProjectAssets.Scripts.Structures;
@@ -13,24 +14,27 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         private FSMachine _fsm;
         private GridView _gridView;
         private StateTransitionContext _transitionContext;
+        private System.Random _rnd;
         
         [Inject]
-        public void Construct(FSMachine fsm, GridView gridView, StateTransitionContext transitionContext)
+        public void Construct(FSMachine fsm, GridView gridView, StateTransitionContext transitionContext, System.Random rnd)
         {
             _gridView = gridView;
             _transitionContext = transitionContext;
             _fsm = fsm;
+            _rnd = rnd;
         }
         public override async void Enter()
         {
             ExplodeMatches(_transitionContext.VerticalMatches);
             ExplodeMatches(_transitionContext.HorizontalMatches);
-            await UniTask.Delay(3000);
+            //await UniTask.Delay(3000);
             _fsm.ChangeState<DropMatchesState>();
         }
 
         private void ExplodeMatches(List<List<ArrayPositionData>> matches)
         {
+            int upperRandomizeBound = Enum.GetValues(typeof(ElementType)).Length;
             foreach (var match in matches)
             {
                 _transitionContext.ComboAmount += match.Count;
@@ -40,7 +44,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     if (_gridView.MatchElements[element.RowIndex, element.ColumnIndex] != null)
                     {
                         _gridView.MatchElements[element.RowIndex, element.ColumnIndex].Explode();
-                        _gridView.ReturnElementToSpawnPoint(element.RowIndex, element.ColumnIndex);
+                        _gridView.ReturnElementToSpawnPoint(element.RowIndex, element.ColumnIndex, (ElementType)_rnd.Next(0, upperRandomizeBound));
                     }
                 }
             }
