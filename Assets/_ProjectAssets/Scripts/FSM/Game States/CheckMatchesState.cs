@@ -11,14 +11,14 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 {
     public class CheckMatchesState : GameState
     {
-        private GridView _gridView;
+        private GameFieldView _gameFieldView;
         private FSMachine _fsm;
         private StateTransitionContext _transitionContext;
 
         [Inject]
-        public void Construct(GridView gridView, FSMachine fsm, StateTransitionContext transitionContext)
+        public void Construct(GameFieldView gameFieldView, FSMachine fsm, StateTransitionContext transitionContext)
         {
-            _gridView = gridView;
+            _gameFieldView = gameFieldView;
             _fsm = fsm;
             _transitionContext = transitionContext;
         }
@@ -43,9 +43,9 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             List<List<ArrayPositionData>> verticalMatchesList = new List<List<ArrayPositionData>>();
             List<List<ArrayPositionData>> horizontalMatchesList = new List<List<ArrayPositionData>>();
             
-            for (int i = 0; i < _gridView.MatchElements.GetLength(0); i++)
+            for (int i = 0; i < _gameFieldView.MatchElements.GetLength(0); i++)
             {
-                for (int j = 0; j < _gridView.MatchElements.GetLength(1); j++)
+                for (int j = 0; j < _gameFieldView.MatchElements.GetLength(1); j++)
                 {
                     if (!IsElementWasIncludedInMatchBefore(verticalMatchesList, i, j))
                     {
@@ -79,7 +79,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 foreach (var element in match)
                 {
-                    shakeTasks.Add(_gridView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
+                    shakeTasks.Add(_gameFieldView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
                 }
             }
 
@@ -87,7 +87,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 foreach (var element in match)
                 {
-                    shakeTasks.Add(_gridView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
+                    shakeTasks.Add(_gameFieldView.MatchElements[element.RowIndex, element.ColumnIndex].Shake());
                 }
             }
 
@@ -101,7 +101,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private List<ArrayPositionData> CheckMatchFigureHorizontal(int i, int j)
         {
-            ElementType elementType = _gridView.MatchElements[i, j].ElementType;
+            ElementType elementType = _gameFieldView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();
             matchedElements.Add(new ArrayPositionData(i, j));
             // left
@@ -109,7 +109,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = j - 1; k >= 0; k--)
                 {
-                    if (_gridView.MatchElements[i, k].ElementType != elementType)
+                    if (_gameFieldView.MatchElements[i, k].ElementType != elementType)
                     {
                         break;
                     }
@@ -119,11 +119,11 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             }
             
             // right
-            if (j < _gridView.MatchElements.GetLength(1) - 2)
+            if (j < _gameFieldView.MatchElements.GetLength(1) - 2)
             {
-                for (int k = j + 1; k <= _gridView.MatchElements.GetLength(1) - 1; k++)
+                for (int k = j + 1; k <= _gameFieldView.MatchElements.GetLength(1) - 1; k++)
                 {
-                    if (_gridView.MatchElements[i, k].ElementType != elementType)
+                    if (_gameFieldView.MatchElements[i, k].ElementType != elementType)
                     {
                         break;
                     }
@@ -137,7 +137,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private List<ArrayPositionData> CheckMatchFigureVertical(int i, int j)
         {
-            ElementType elementType = _gridView.MatchElements[i, j].ElementType;
+            ElementType elementType = _gameFieldView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();
             matchedElements.Add(new ArrayPositionData(i, j));
             // up
@@ -145,7 +145,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             {
                 for (int k = i - 1; k >= 0; k--)
                 {
-                    if (_gridView.MatchElements[k, j].ElementType != elementType)
+                    if (_gameFieldView.MatchElements[k, j].ElementType != elementType)
                     {
                         break;
                     }
@@ -155,11 +155,11 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             }
             
             // down
-            if (i < _gridView.MatchElements.GetLength(0) - 2)
+            if (i < _gameFieldView.MatchElements.GetLength(0) - 2)
             {
-                for (int k = i + 1; k <= _gridView.MatchElements.GetLength(0) - 1; k++)
+                for (int k = i + 1; k <= _gameFieldView.MatchElements.GetLength(0) - 1; k++)
                 {
-                    if (_gridView.MatchElements[k, j].ElementType != elementType)
+                    if (_gameFieldView.MatchElements[k, j].ElementType != elementType)
                     {
                         break;
                     }

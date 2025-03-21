@@ -10,12 +10,12 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
     public class DropMatchesState : GameState
     {
         private FSMachine _fsm;
-        private GridView _gridView;
+        private GameFieldView _gameFieldView;
         [Inject]
-        public void Construct(FSMachine fsm, GridView gridView)
+        public void Construct(FSMachine fsm, GameFieldView gameFieldView)
         {
             _fsm = fsm;
-            _gridView = gridView;
+            _gameFieldView = gameFieldView;
         }
         public override async void Enter()
         {
@@ -29,11 +29,11 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             int dropTargetRow = 0;
             ArrayPositionData currentElementPosData = new ArrayPositionData();
             List<UniTask> dropTasks = new List<UniTask>();
-            for (int i = _gridView.MatchElements.GetLength(0) - 1; i >= 0; i--)
+            for (int i = _gameFieldView.MatchElements.GetLength(0) - 1; i >= 0; i--)
             {
-                for (int j = _gridView.MatchElements.GetLength(1) - 1; j >= 0; j--)
+                for (int j = _gameFieldView.MatchElements.GetLength(1) - 1; j >= 0; j--)
                 {
-                    if (!_gridView.MatchElements[i, j])
+                    if (!_gameFieldView.MatchElements[i, j])
                     {
                         continue;
                     }
@@ -44,7 +44,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     {
                         currentElementPosData.ColumnIndex = j;
                         currentElementPosData.RowIndex = i;
-                        dropTasks.Add( _gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow));
+                        dropTasks.Add( _gameFieldView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow));
                     }
                 }
             }
@@ -58,11 +58,11 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             ArrayPositionData currentElementPosData = new ArrayPositionData();
             List<UniTask> dropTasks = new List<UniTask>();
             
-            for (int i = _gridView.ReservedElements.GetLength(0) - 1; i >= 0; i--)
+            for (int i = _gameFieldView.ReservedElements.GetLength(0) - 1; i >= 0; i--)
             {
-                for (int j = _gridView.ReservedElements.GetLength(1) - 1; j >= 0; j--)
+                for (int j = _gameFieldView.ReservedElements.GetLength(1) - 1; j >= 0; j--)
                 {
-                    if (!_gridView.ReservedElements[i, j])
+                    if (!_gameFieldView.ReservedElements[i, j])
                     {
                         continue;
                     }
@@ -71,7 +71,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
                     currentElementPosData.RowIndex = i;
                     currentElementPosData.ColumnIndex = j;
-                    dropTasks.Add(_gridView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow, false));
+                    dropTasks.Add(_gameFieldView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow, false));
                 }
             }
             
@@ -80,9 +80,9 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private int FindLowestEmptySlot(int initialElementRow, int column)
         {
-            for (int i = _gridView.MatchElements.GetLength(0) - 1; i > initialElementRow; i--)
+            for (int i = _gameFieldView.MatchElements.GetLength(0) - 1; i > initialElementRow; i--)
             {
-                if (_gridView.MatchElements[i, column] == null)
+                if (_gameFieldView.MatchElements[i, column] == null)
                 {
                     return i;
                 }

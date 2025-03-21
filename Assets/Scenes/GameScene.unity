@@ -6842,8 +6842,10 @@ GameObject:
   - component: {fileID: 1181406221}
   - component: {fileID: 1181406220}
   - component: {fileID: 1181406219}
+  - component: {fileID: 1181406222}
+  - component: {fileID: 1181406223}
   m_Layer: 5
-  m_Name: Game Field Mask
+  m_Name: Game Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6922,6 +6924,138 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1181406217}
   m_CullTransparentMesh: 1
+--- !u!114 &1181406222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181406217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb65ff430b7d384895b27bf823b4c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fieldColumns: 5
+  _spawnSpots:
+  - {fileID: 1188481701}
+  - {fileID: 480137372}
+  - {fileID: 1520301282}
+  - {fileID: 766706258}
+  - {fileID: 579797921}
+  - {fileID: 2027405911}
+  - {fileID: 898124332}
+  - {fileID: 327386628}
+  - {fileID: 1625771168}
+  - {fileID: 1819557062}
+  - {fileID: 594586539}
+  - {fileID: 324798841}
+  - {fileID: 1435185802}
+  - {fileID: 122228811}
+  - {fileID: 1346110485}
+  - {fileID: 2006327538}
+  - {fileID: 1963258506}
+  - {fileID: 1526826101}
+  - {fileID: 582002594}
+  - {fileID: 24144916}
+  - {fileID: 1188896457}
+  - {fileID: 1161269246}
+  - {fileID: 841099312}
+  - {fileID: 384446470}
+  - {fileID: 1420490849}
+  - {fileID: 322739161}
+  - {fileID: 1084001805}
+  - {fileID: 1543749666}
+  - {fileID: 1964394735}
+  - {fileID: 1724298937}
+  - {fileID: 1014238953}
+  - {fileID: 2041189077}
+  - {fileID: 1166727471}
+  - {fileID: 1586536201}
+  - {fileID: 966754433}
+  - {fileID: 535064324}
+  - {fileID: 467668024}
+  - {fileID: 908736603}
+  - {fileID: 1028874712}
+  - {fileID: 193065008}
+  - {fileID: 1259134307}
+  - {fileID: 533894165}
+  - {fileID: 180851820}
+  - {fileID: 1497575899}
+  - {fileID: 831303900}
+  - {fileID: 1502187824}
+  - {fileID: 891079014}
+  - {fileID: 1948483718}
+  - {fileID: 1079318298}
+  - {fileID: 1967339346}
+  _targetSpots:
+  - {fileID: 616485111}
+  - {fileID: 276494130}
+  - {fileID: 1531369319}
+  - {fileID: 1162522091}
+  - {fileID: 1360833951}
+  - {fileID: 1775522913}
+  - {fileID: 1012160725}
+  - {fileID: 625356959}
+  - {fileID: 684856400}
+  - {fileID: 1738956384}
+  - {fileID: 57892629}
+  - {fileID: 2141081837}
+  - {fileID: 1519559977}
+  - {fileID: 1735419947}
+  - {fileID: 379404698}
+  - {fileID: 1003740993}
+  - {fileID: 2041089778}
+  - {fileID: 1097207621}
+  - {fileID: 552710731}
+  - {fileID: 1438838625}
+  - {fileID: 1376604020}
+  - {fileID: 13379407}
+  - {fileID: 562731411}
+  - {fileID: 1306083878}
+  - {fileID: 529118041}
+  - {fileID: 1401838896}
+  - {fileID: 1268049267}
+  - {fileID: 1585549422}
+  - {fileID: 1483904823}
+  - {fileID: 1830724482}
+  - {fileID: 976610995}
+  - {fileID: 1119390126}
+  - {fileID: 1138671846}
+  - {fileID: 542041689}
+  - {fileID: 1726202568}
+  - {fileID: 429067925}
+  - {fileID: 616098151}
+  - {fileID: 2071442318}
+  - {fileID: 717928623}
+  - {fileID: 1321100544}
+  - {fileID: 230311250}
+  - {fileID: 888975898}
+  - {fileID: 1295328444}
+  - {fileID: 2025287187}
+  - {fileID: 2009712345}
+  - {fileID: 319637439}
+  - {fileID: 1013000907}
+  - {fileID: 1489692532}
+  - {fileID: 674861876}
+  - {fileID: 1187852737}
+  _matchElementPrefab: {fileID: 7587919010358211285, guid: de090679c43297d4ba4d902087ebb118, type: 3}
+  _dropDurationLowerBound: 1
+  _dropDurationUpperBound: 3
+  _fieldCanvasGroup: {fileID: 1181406223}
+  _swapLayer: {fileID: 1484847917}
+--- !u!225 &1181406223
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181406217}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1187852737 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6555363056898244567, guid: 6c0424e0eca9c544bbb87c49c2faef03, type: 3}
@@ -7077,7 +7211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7915312f59f9fae4cb7583dd02052671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridView: {fileID: 1743561437}
+  _gameFieldView: {fileID: 1181406222}
 --- !u!4 &1206960591
 Transform:
   m_ObjectHideFlags: 0
@@ -7561,6 +7695,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1181406218}
+  - {fileID: 1484847918}
   m_Father: {fileID: 887181276}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -8312,6 +8447,41 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6555363056898244567, guid: 6c0424e0eca9c544bbb87c49c2faef03, type: 3}
   m_PrefabInstance: {fileID: 175065536}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1484847917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1484847918}
+  m_Layer: 5
+  m_Name: SwapLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1484847918
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484847917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1339507156}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1485432910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9656,7 +9826,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1743561435}
   - component: {fileID: 1743561436}
-  - component: {fileID: 1743561437}
   m_Layer: 5
   m_Name: Grid
   m_TagString: Untagged
@@ -9757,124 +9926,6 @@ MonoBehaviour:
   m_Spacing: {x: 4, y: 4}
   m_Constraint: 1
   m_ConstraintCount: 5
---- !u!114 &1743561437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1743561434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddb65ff430b7d384895b27bf823b4c40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _fieldColumns: 5
-  _spawnSpots:
-  - {fileID: 1188481701}
-  - {fileID: 480137372}
-  - {fileID: 1520301282}
-  - {fileID: 766706258}
-  - {fileID: 579797921}
-  - {fileID: 2027405911}
-  - {fileID: 898124332}
-  - {fileID: 327386628}
-  - {fileID: 1625771168}
-  - {fileID: 1819557062}
-  - {fileID: 594586539}
-  - {fileID: 324798841}
-  - {fileID: 1435185802}
-  - {fileID: 122228811}
-  - {fileID: 1346110485}
-  - {fileID: 2006327538}
-  - {fileID: 1963258506}
-  - {fileID: 1526826101}
-  - {fileID: 582002594}
-  - {fileID: 24144916}
-  - {fileID: 1188896457}
-  - {fileID: 1161269246}
-  - {fileID: 841099312}
-  - {fileID: 384446470}
-  - {fileID: 1420490849}
-  - {fileID: 322739161}
-  - {fileID: 1084001805}
-  - {fileID: 1543749666}
-  - {fileID: 1964394735}
-  - {fileID: 1724298937}
-  - {fileID: 1014238953}
-  - {fileID: 2041189077}
-  - {fileID: 1166727471}
-  - {fileID: 1586536201}
-  - {fileID: 966754433}
-  - {fileID: 535064324}
-  - {fileID: 467668024}
-  - {fileID: 908736603}
-  - {fileID: 1028874712}
-  - {fileID: 193065008}
-  - {fileID: 1259134307}
-  - {fileID: 533894165}
-  - {fileID: 180851820}
-  - {fileID: 1497575899}
-  - {fileID: 831303900}
-  - {fileID: 1502187824}
-  - {fileID: 891079014}
-  - {fileID: 1948483718}
-  - {fileID: 1079318298}
-  - {fileID: 1967339346}
-  _targetSpots:
-  - {fileID: 616485111}
-  - {fileID: 276494130}
-  - {fileID: 1531369319}
-  - {fileID: 1162522091}
-  - {fileID: 1360833951}
-  - {fileID: 1775522913}
-  - {fileID: 1012160725}
-  - {fileID: 625356959}
-  - {fileID: 684856400}
-  - {fileID: 1738956384}
-  - {fileID: 57892629}
-  - {fileID: 2141081837}
-  - {fileID: 1519559977}
-  - {fileID: 1735419947}
-  - {fileID: 379404698}
-  - {fileID: 1003740993}
-  - {fileID: 2041089778}
-  - {fileID: 1097207621}
-  - {fileID: 552710731}
-  - {fileID: 1438838625}
-  - {fileID: 1376604020}
-  - {fileID: 13379407}
-  - {fileID: 562731411}
-  - {fileID: 1306083878}
-  - {fileID: 529118041}
-  - {fileID: 1401838896}
-  - {fileID: 1268049267}
-  - {fileID: 1585549422}
-  - {fileID: 1483904823}
-  - {fileID: 1830724482}
-  - {fileID: 976610995}
-  - {fileID: 1119390126}
-  - {fileID: 1138671846}
-  - {fileID: 542041689}
-  - {fileID: 1726202568}
-  - {fileID: 429067925}
-  - {fileID: 616098151}
-  - {fileID: 2071442318}
-  - {fileID: 717928623}
-  - {fileID: 1321100544}
-  - {fileID: 230311250}
-  - {fileID: 888975898}
-  - {fileID: 1295328444}
-  - {fileID: 2025287187}
-  - {fileID: 2009712345}
-  - {fileID: 319637439}
-  - {fileID: 1013000907}
-  - {fileID: 1489692532}
-  - {fileID: 674861876}
-  - {fileID: 1187852737}
-  _matchElementPrefab: {fileID: 7587919010358211285, guid: de090679c43297d4ba4d902087ebb118, type: 3}
-  _dropDurationLowerBound: 1
-  _dropDurationUpperBound: 3
 --- !u!1001 &1745286203
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,14 +12,14 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
     public class DestroyMatchedElementsState : GameState
     {
         private FSMachine _fsm;
-        private GridView _gridView;
+        private GameFieldView _gameFieldView;
         private StateTransitionContext _transitionContext;
         private System.Random _rnd;
         
         [Inject]
-        public void Construct(FSMachine fsm, GridView gridView, StateTransitionContext transitionContext, System.Random rnd)
+        public void Construct(FSMachine fsm, GameFieldView gameFieldView, StateTransitionContext transitionContext, System.Random rnd)
         {
-            _gridView = gridView;
+            _gameFieldView = gameFieldView;
             _transitionContext = transitionContext;
             _fsm = fsm;
             _rnd = rnd;
@@ -41,10 +41,10 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 // Display at ui layer
                 foreach (var element in match)
                 {
-                    if (_gridView.MatchElements[element.RowIndex, element.ColumnIndex] != null)
+                    if (_gameFieldView.MatchElements[element.RowIndex, element.ColumnIndex] != null)
                     {
-                        _gridView.MatchElements[element.RowIndex, element.ColumnIndex].Explode();
-                        _gridView.ReturnElementToSpawnPoint(element.RowIndex, element.ColumnIndex, (ElementType)_rnd.Next(0, upperRandomizeBound));
+                        _gameFieldView.MatchElements[element.RowIndex, element.ColumnIndex].Explode();
+                        _gameFieldView.ReturnElementToSpawnPoint(element.RowIndex, element.ColumnIndex, (ElementType)_rnd.Next(0, upperRandomizeBound));
                     }
                 }
             }

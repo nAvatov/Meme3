@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace _ProjectAssets.Scripts.View
 {
-    public class GridView : MonoBehaviour
+    public class GameFieldView : MonoBehaviour
     {
         [SerializeField] private int _fieldColumns;
     
@@ -19,6 +19,10 @@ namespace _ProjectAssets.Scripts.View
         [Header("Drop animation properties")] 
         [SerializeField] private int _dropDurationLowerBound;
         [SerializeField] private int _dropDurationUpperBound;
+
+        [Header("Move elements properties")] 
+        [SerializeField] private CanvasGroup _fieldCanvasGroup;
+        [SerializeField] private GameObject _swapLayer;
     
         private MatchElement[,] _matchElements;
         private MatchElement[,] _reservedElements;
@@ -50,6 +54,7 @@ namespace _ProjectAssets.Scripts.View
                     {
                         _matchElements[i, j] = Instantiate(_matchElementPrefab, _spawnSpots[k].transform);
                         _matchElements[i, j].SetElementType(elementsMatrix[i, j]);
+                        _matchElements[i, j].GetComponent<DragAndDrop>().Initialize(_swapLayer);
                         k++;
                     }
                 }
@@ -119,6 +124,12 @@ namespace _ProjectAssets.Scripts.View
                 })
                 .AsyncWaitForCompletion()
                 .AsUniTask();
+        }
+
+        public void HandleFieldInteractability(bool isFieldInteractable)
+        {
+            _fieldCanvasGroup.interactable = isFieldInteractable;
+            _fieldCanvasGroup.blocksRaycasts = isFieldInteractable;
         }
 
         public void Swap()

@@ -10,28 +10,31 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 {
     public class PrimaryGenerationState : GameState
     {
-        private GridView _gridView;
+        private GameFieldView _gameFieldView;
         private FSMachine _fsm;
         private System.Random _generationRnd;
         
         [Inject]
-        public void Construct(GridView gridView, FSMachine fsm, System.Random generationRnd)
+        public void Construct(GameFieldView gameFieldView, FSMachine fsm, System.Random generationRnd)
         {
-            _gridView = gridView;
+            _gameFieldView = gameFieldView;
             _fsm = fsm;
             _generationRnd = generationRnd;
         }
         
         public override async void Enter()
         {
+            _gameFieldView.HandleFieldInteractability(false);
+            
             GenerateElements();
             await CalculateDropOrder();
+            
             _fsm.ChangeState<CheckMatchesState>();
         }
 
         private void GenerateElements()
         {
-            ElementType[,] generation = new ElementType[_gridView.RowsAmount, _gridView.ColumnsAmount];
+            ElementType[,] generation = new ElementType[_gameFieldView.RowsAmount, _gameFieldView.ColumnsAmount];
             int upperRandomBound = Enum.GetValues(typeof(ElementType)).Length;
 
             do
@@ -46,7 +49,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 }
             } while (!CheckGenerationValidity());
             
-            _gridView.Spawn(generation);
+            _gameFieldView.Spawn(generation);
         }
 
         private bool CheckGenerationValidity()
@@ -56,9 +59,9 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         private async UniTask CalculateDropOrder()
         {
-            if (_gridView.ColumnsAmount != _gridView.MatchElements.GetLength(1))
+            if (_gameFieldView.ColumnsAmount != _gameFieldView.MatchElements.GetLength(1))
             {
-                Debug.Log("Items and spots dimensions are unmatched. Expected columns : " + _gridView.ColumnsAmount+ ", got " + _gridView.MatchElements.GetUpperBound(1));
+                Debug.Log("Items and spots dimensions are unmatched. Expected columns : " + _gameFieldView.ColumnsAmount+ ", got " + _gameFieldView.MatchElements.GetUpperBound(1));
                 return;
             }
         
@@ -68,26 +71,26 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             List<ElementDropTicket> rowOfShuffledElements = new List<ElementDropTicket>();
             _generationRnd = new System.Random();
 
-            for (int i = _gridView.MatchElements.GetLength(0) - 1; i >= 0; i--)
+            for (int i = _gameFieldView.MatchElements.GetLength(0) - 1; i >= 0; i--)
             {
-                for (int j = 0; j < _gridView.MatchElements.GetLength(1); j++)
+                for (int j = 0; j < _gameFieldView.MatchElements.GetLength(1); j++)
                 {
-                    randomColumnIndex = _generationRnd.Next(0, _gridView.ColumnsAmount);
+                    randomColumnIndex = _generationRnd.Next(0, _gameFieldView.ColumnsAmount);
                     // TODO: Update target collection of random pick should be more effective way
-                    while (rowOfShuffledElements.Exists(x => x.MatchElement == _gridView.MatchElements[i, randomColumnIndex]))
+                    while (rowOfShuffledElements.Exists(x => x.MatchElement == _gameFieldView.MatchElements[i, randomColumnIndex]))
                     {
-                        randomColumnIndex = _generationRnd.Next(0, _gridView.ColumnsAmount);
+                        randomColumnIndex = _generationRnd.Next(0, _gameFieldView.ColumnsAmount);
                     }
                     
                     currentDropTicket = new ElementDropTicket();
                     currentDropTicket.ArrayPosition = new ArrayPositionData();
                     currentDropTicket.ArrayPosition.ColumnIndex = randomColumnIndex;
                     currentDropTicket.ArrayPosition.RowIndex = i;
-                    currentDropTicket.MatchElement = _gridView.MatchElements[i, randomColumnIndex];
+                    currentDropTicket.MatchElement = _gameFieldView.MatchElements[i, randomColumnIndex];
                     rowOfShuffledElements.Add(currentDropTicket);
                 }
                 
-                await _gridView.AnimateInitialDrop(rowOfShuffledElements);
+                await _gameFieldView.AnimateInitialDrop(rowOfShuffledElements);
                 rowOfShuffledElements.Clear();
             }
         }

@@ -1,5 +1,6 @@
 using _ProjectAssets.Scripts.FSM;
 using _ProjectAssets.Scripts.FSM.States_Infrastructure;
+using UnityEngine;
 using Zenject;
 
 namespace _ProjectAssets.Scripts.Installers
