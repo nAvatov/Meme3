@@ -1,5 +1,7 @@
 using _ProjectAssets.Scripts.FSM;
 using _ProjectAssets.Scripts.FSM.States_Infrastructure;
+using _ProjectAssets.Scripts.Structures;
+using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
@@ -13,6 +15,15 @@ namespace _ProjectAssets.Scripts.Installers
             Container.Bind<StateFactory>().AsSingle();
             Container.Bind<StateTransitionContext>().AsSingle();
             Container.BindInstance(_generationRnd).AsSingle();
+
+            InstallSignals();
+        }
+
+        public void InstallSignals()
+        {
+            SignalBusInstaller.Install(Container);
+            
+            Container.DeclareSignal<SwapSignal>();
         }
     }
 }

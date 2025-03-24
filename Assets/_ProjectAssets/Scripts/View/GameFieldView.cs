@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using _ProjectAssets.Scripts.Installers;
 using _ProjectAssets.Scripts.Instances;
 using _ProjectAssets.Scripts.Structures;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using Zenject;
 using Random = System.Random;
 
 namespace _ProjectAssets.Scripts.View
@@ -29,16 +31,22 @@ namespace _ProjectAssets.Scripts.View
     
 
         private Random _dropAnimRnd;
+        private SignalBus _signalBus;
 
         public int ColumnsAmount => _fieldColumns;
         public int RowsAmount => _spawnSpots.Count / _fieldColumns;
 
         public GameObject[,] TargetSpotsArray { get; set; }
         public GameObject[,] SpawnSpotsArray { get; set; }
-    
         public List<GameObject> TargetSpots => _targetSpots;
         public MatchElement[,] MatchElements => _matchElements;
         public MatchElement[,] ReservedElements => _reservedElements;
+
+        [Inject]
+        public void Construct(SignalBus signalBus)
+        {
+            _signalBus = signalBus;
+        }
 
         public void Spawn(ElementType[,] elementsMatrix)
         {
@@ -54,7 +62,8 @@ namespace _ProjectAssets.Scripts.View
                     {
                         _matchElements[i, j] = Instantiate(_matchElementPrefab, _spawnSpots[k].transform);
                         _matchElements[i, j].SetElementType(elementsMatrix[i, j]);
-                        _matchElements[i, j].GetComponent<DragAndDrop>().Initialize(_swapLayer);
+                        _matchElements[i, j].SetPositionData(new ArrayPositionData(i, j));
+                        _matchElements[i, j].GetComponent<DragAndDrop>().Initialize(_swapLayer, _signalBus);
                         k++;
                     }
                 }
@@ -86,17 +95,17 @@ namespace _ProjectAssets.Scripts.View
                 _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex].transform.SetParent(TargetSpotsArray[targetRowIndex, initialPosition.ColumnIndex].transform);
                 _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
                 _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
-                
-                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             }
             else
             {
                 _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex].transform.SetParent(TargetSpotsArray[targetRowIndex, initialPosition.ColumnIndex].transform);
                 _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
                 _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
-                
-                await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             }
+            
+            await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
+            
+            _matchElements[targetRowIndex, initialPosition.ColumnIndex].SetPositionData(new ArrayPositionData(targetRowIndex, initialPosition.ColumnIndex));
         }
 
         public void ReturnElementToSpawnPoint(int i, int j, ElementType newElementType)

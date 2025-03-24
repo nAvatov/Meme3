@@ -28,7 +28,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             var foundMatches = await IsMatchFound();
             if (foundMatches)
             {
-                Debug.Log("Matches found!");
+                //Debug.Log("Matches found!");
                 
                 _fsm.ChangeState<DestroyMatchedElementsState>();
             }
@@ -63,8 +63,8 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             horizontalMatchesList = horizontalMatchesList.Where(match => match.Count > 2).ToList();
             
             _transitionContext.SetMatches(verticalMatchesList, horizontalMatchesList);
-            Debug.Log("Vertical matches amount: " + verticalMatchesList.Count);
-            Debug.Log("Horizontal matches amount: " +horizontalMatchesList.Count);
+            //Debug.Log("Vertical matches amount: " + verticalMatchesList.Count);
+            //Debug.Log("Horizontal matches amount: " +horizontalMatchesList.Count);
             
             await ShakeFoundMatches(verticalMatchesList, horizontalMatchesList);
 

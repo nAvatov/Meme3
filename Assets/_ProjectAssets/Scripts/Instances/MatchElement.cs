@@ -1,4 +1,5 @@
 using System;
+using _ProjectAssets.Scripts.Structures;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -15,6 +16,7 @@ namespace _ProjectAssets.Scripts.Instances
         [SerializeField] private Image _background;
         private ElementType _elementType;
 
+        public ArrayPositionData PositionData { get; private set; }
         public ElementType ElementType => _elementType;
 
         public void SetElementType(ElementType type)
@@ -22,6 +24,8 @@ namespace _ProjectAssets.Scripts.Instances
             _elementType = type;
             _image.color = DecideColor();
         }
+        
+        public void SetPositionData(ArrayPositionData arrayPositionData) => PositionData = arrayPositionData;
 
         public void Explode()
         {
