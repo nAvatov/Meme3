@@ -82,7 +82,7 @@ namespace _ProjectAssets.Scripts.View
             
                 element.MatchElement.transform.SetParent(TargetSpotsArray[element.ArrayPosition.RowIndex, element.ArrayPosition.ColumnIndex].transform);
 
-                animateTasks.Add(AnimateElementDrop(element.MatchElement));
+                animateTasks.Add(AnimateElementMoveToIdentity(element.MatchElement));
             }
         
             await UniTask.WhenAll(animateTasks);
@@ -103,7 +103,7 @@ namespace _ProjectAssets.Scripts.View
                 _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
             }
             
-            await AnimateElementDrop(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
+            await AnimateElementMoveToIdentity(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             
             _matchElements[targetRowIndex, initialPosition.ColumnIndex].SetPositionData(new ArrayPositionData(targetRowIndex, initialPosition.ColumnIndex));
         }
@@ -122,8 +122,9 @@ namespace _ProjectAssets.Scripts.View
             _matchElements[i, j] = null;
         }
 
-        private async UniTask AnimateElementDrop(MatchElement element)
+        private async UniTask AnimateElementMoveToIdentity(MatchElement element)
         {
+            element.transform.DOComplete();
             await element.transform.DOLocalMove(Vector3.zero, _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f)
                 .SetEase(Ease.InCubic)
                 .OnComplete(() =>
@@ -141,9 +142,19 @@ namespace _ProjectAssets.Scripts.View
             _fieldCanvasGroup.blocksRaycasts = isFieldInteractable;
         }
 
-        public void Swap()
+        public async UniTask Swap(ArrayPositionData el1, ArrayPositionData el2)
         {
-        
+            _matchElements[el1.RowIndex, el1.ColumnIndex].transform.SetParent(TargetSpotsArray[el2.RowIndex, el2.ColumnIndex].transform);
+            _matchElements[el2.RowIndex, el2.ColumnIndex].transform.SetParent(TargetSpotsArray[el1.RowIndex, el1.ColumnIndex].transform);
+
+            await AnimateElementMoveToIdentity(_matchElements[el1.RowIndex, el1.ColumnIndex]);
+            await AnimateElementMoveToIdentity(_matchElements[el2.RowIndex, el2.ColumnIndex]);
+        }
+
+        public void ChangeInteractabilityOfSwapElements(ArrayPositionData el1, ArrayPositionData el2, bool isInteractable)
+        {
+            _matchElements[el1.RowIndex, el1.ColumnIndex].GetComponent<DragAndDrop>().ChangeInteractability(isInteractable);
+            _matchElements[el2.RowIndex, el2.ColumnIndex].GetComponent<DragAndDrop>().ChangeInteractability(isInteractable);
         }
     }
 }

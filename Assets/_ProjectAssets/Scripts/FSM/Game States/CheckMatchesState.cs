@@ -25,11 +25,10 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         public override async void Enter()
         {
+            Debug.Log("Check state");
             var foundMatches = await IsMatchFound();
             if (foundMatches)
             {
-                //Debug.Log("Matches found!");
-                
                 _fsm.ChangeState<DestroyMatchedElementsState>();
             }
             else

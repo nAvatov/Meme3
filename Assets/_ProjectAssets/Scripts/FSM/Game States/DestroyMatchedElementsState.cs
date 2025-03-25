@@ -24,11 +24,13 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             _fsm = fsm;
             _rnd = rnd;
         }
-        public override async void Enter()
+        public override void Enter()
         {
             ExplodeMatches(_transitionContext.VerticalMatches);
             ExplodeMatches(_transitionContext.HorizontalMatches);
-            //await UniTask.Delay(3000);
+            
+            _transitionContext.ClearCachedSwapMatches();
+            
             _fsm.ChangeState<DropMatchesState>();
         }
 

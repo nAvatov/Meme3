@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 2866683686859743734}
   - component: {fileID: 3759540701801674937}
   - component: {fileID: 9051205138347090622}
+  - component: {fileID: 4734355046522675626}
   m_Layer: 5
   m_Name: Match Element
   m_TagString: Untagged
@@ -137,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f77fe9332f1f2634db3c7c24d0160713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _image: {fileID: 3765013002133693170}
+  _typeImage: {fileID: 3765013002133693170}
   _background: {fileID: 1627573237162082337}
 --- !u!114 &2866683686859743734
 MonoBehaviour:
@@ -164,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c022a81253437a4191764ce1ecd477d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 4734355046522675626}
 --- !u!114 &9051205138347090622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +196,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &4734355046522675626
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555363056898244567}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8515412161671529981
 GameObject:
   m_ObjectHideFlags: 0
