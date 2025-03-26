@@ -10,5 +10,10 @@ namespace _ProjectAssets.Scripts.Structures
             RowIndex = rowIndex;
             ColumnIndex = columnIndex;
         }
+
+        public string DebugPositionData()
+        {
+            return string.Format("RowIndex: {0}, ColumnIndex: {1}", RowIndex, ColumnIndex);
+        }
     }
 }

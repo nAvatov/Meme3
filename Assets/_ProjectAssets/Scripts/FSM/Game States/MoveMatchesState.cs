@@ -1,11 +1,8 @@
-using System.Text.RegularExpressions;
 using _ProjectAssets.Scripts.FSM.States_Infrastructure;
-using _ProjectAssets.Scripts.Installers;
 using _ProjectAssets.Scripts.Instances;
 using _ProjectAssets.Scripts.Structures;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
@@ -64,7 +61,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 
                 await _gameFieldView.Swap(signal.MovingElement, signal.TargetElement);
                 
-                SwitchMatrixElements(signal.MovingElement, signal.TargetElement);
+                SwapElementsData(signal.MovingElement, signal.TargetElement);
                 
                 _fsm.ChangeState<CheckMatchesState>();
             }
@@ -86,14 +83,19 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                  (el1.ColumnIndex == el2.ColumnIndex - 1 && el1.RowIndex == el2.RowIndex));
         }
 
-        private void SwitchMatrixElements(ArrayPositionData el1, ArrayPositionData el2)
+        private void SwapElementsData(ArrayPositionData el1, ArrayPositionData el2)
         {
             MatchElement buf;
             
             buf = _gameFieldView.MatchElements[el2.RowIndex, el2.ColumnIndex];
-            _gameFieldView.MatchElements[el2.RowIndex,el2.ColumnIndex] = _gameFieldView.MatchElements[el1.RowIndex, el1.ColumnIndex];
+            _gameFieldView.MatchElements[el2.RowIndex,el2.ColumnIndex] =_gameFieldView.MatchElements[el1.RowIndex, el1.ColumnIndex];
             _gameFieldView.MatchElements[el1.RowIndex, el1.ColumnIndex] = buf;
+            
+            
+            _gameFieldView.MatchElements[el1.RowIndex, el1.ColumnIndex].SetPositionData(el1);
+            _gameFieldView.MatchElements[el2.RowIndex, el2.ColumnIndex].SetPositionData(el2);
         }
+        
 
         private async UniTask ReturnSwapElementToPreviousPos()
         {
@@ -102,8 +104,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 _transitionContext.TargetedElement.PositionData
             );
             
-            SwitchMatrixElements(_transitionContext.MovedElement.PositionData, _transitionContext.TargetedElement.PositionData);
+            SwapElementsData(_transitionContext.MovedElement.PositionData, _transitionContext.TargetedElement.PositionData);
         }
-        
     }
 }

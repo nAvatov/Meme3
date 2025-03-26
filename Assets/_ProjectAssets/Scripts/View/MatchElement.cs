@@ -1,12 +1,10 @@
-using System;
 using _ProjectAssets.Scripts.Structures;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _ProjectAssets.Scripts.Instances
@@ -15,7 +13,8 @@ namespace _ProjectAssets.Scripts.Instances
     {
         [SerializeField] private Image _typeImage;
         [SerializeField] private Image _background;
-        private ElementType _elementType;
+        [SerializeField] private TextMeshProUGUI _posText;
+        public ElementType _elementType;
 
         public ArrayPositionData PositionData { get; private set; }
         public ElementType ElementType => _elementType;
@@ -26,11 +25,15 @@ namespace _ProjectAssets.Scripts.Instances
             _typeImage.color = DecideColor();
         }
         
-        public void SetPositionData(ArrayPositionData arrayPositionData) => PositionData = arrayPositionData;
-        
+        public void SetPositionData(ArrayPositionData arrayPositionData)
+        {
+            //_posText.SetText(arrayPositionData.RowIndex + " " + arrayPositionData.ColumnIndex);
+            PositionData = arrayPositionData;
+        }
+
         public async UniTask Shake()
         {
-            await gameObject.transform.DOShakeRotation(1f, new Vector3(0, 0, 25), 50, 90f, true)
+            await gameObject.transform.DOShakeRotation(1f, new Vector3(0, 0, 10), 50, 45f, false)
                 .OnComplete(() =>
                 {
                     gameObject.transform.rotation = quaternion.identity;
@@ -42,7 +45,7 @@ namespace _ProjectAssets.Scripts.Instances
 
         public void Explode()
         {
-            //_background.color = new Color(0, 0, 0, 1);
+            
         }
         
 
@@ -56,6 +59,11 @@ namespace _ProjectAssets.Scripts.Instances
                 ElementType.Yellow => Color.yellow,
                 _ => Color.white
             };
+        }
+
+        private void OnDestroy()
+        {
+            gameObject.transform.DOKill();
         }
     }
 }

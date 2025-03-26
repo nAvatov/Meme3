@@ -46,6 +46,7 @@ namespace _ProjectAssets.Scripts.View
         public void Construct(SignalBus signalBus)
         {
             _signalBus = signalBus;
+            SpawnSpotsArray = CollectionWrapper.WrapListToTwoDimArray(_spawnSpots, _fieldColumns);
         }
 
         public void Spawn(ElementType[,] elementsMatrix)
@@ -88,45 +89,36 @@ namespace _ProjectAssets.Scripts.View
             await UniTask.WhenAll(animateTasks);
         }
 
-        public async UniTask AnimateSingleElementDrop(ArrayPositionData initialPosition, int targetRowIndex, bool isInnerFieldDrop = true)
+        public void ChangeElementPositionBeforeDrop(ArrayPositionData initialPosition, int targetRowIndex, bool isInnerFieldDrop = true)
         {
             if (isInnerFieldDrop)
             {
                 _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex].transform.SetParent(TargetSpotsArray[targetRowIndex, initialPosition.ColumnIndex].transform);
-                _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
-                _matchElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
             }
             else
             {
                 _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex].transform.SetParent(TargetSpotsArray[targetRowIndex, initialPosition.ColumnIndex].transform);
-                _matchElements[targetRowIndex, initialPosition.ColumnIndex] = _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex];
-                _reservedElements[initialPosition.RowIndex, initialPosition.ColumnIndex] = null;
             }
-            
+        }
+
+        public async UniTask AnimateSingleElementDrop(ArrayPositionData initialPosition, int targetRowIndex)
+        {
             await AnimateElementMoveToIdentity(_matchElements[targetRowIndex, initialPosition.ColumnIndex]);
             
             _matchElements[targetRowIndex, initialPosition.ColumnIndex].SetPositionData(new ArrayPositionData(targetRowIndex, initialPosition.ColumnIndex));
         }
 
-        public void ReturnElementToSpawnPoint(int i, int j, ElementType newElementType)
+        public void ReturnElementToSpawnPoint(int i, int j)
         {
-            if (SpawnSpotsArray == null)
-            {
-                SpawnSpotsArray = CollectionWrapper.WrapListToTwoDimArray(_spawnSpots, _fieldColumns);
-            }
-
             _matchElements[i, j].transform.SetParent(SpawnSpotsArray[i, j].transform);
             _matchElements[i, j].transform.localPosition = Vector3.zero;
-            _reservedElements[i, j] = _matchElements[i, j];
-            _reservedElements[i, j].SetElementType(newElementType);
-            _matchElements[i, j] = null;
         }
 
         private async UniTask AnimateElementMoveToIdentity(MatchElement element)
         {
             element.transform.DOComplete();
             await element.transform.DOLocalMove(Vector3.zero, _dropAnimRnd.Next(_dropDurationLowerBound, _dropDurationUpperBound) / 10f)
-                .SetEase(Ease.InCubic)
+                .SetEase(Ease.Linear)
                 .OnComplete(() =>
                 {
                     element.transform.localPosition = Vector3.zero;

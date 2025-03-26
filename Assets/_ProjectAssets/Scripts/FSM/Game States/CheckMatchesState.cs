@@ -4,7 +4,6 @@ using _ProjectAssets.Scripts.FSM.States_Infrastructure;
 using _ProjectAssets.Scripts.Structures;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Zenject;
 
 namespace _ProjectAssets.Scripts.FSM.Game_States
@@ -25,7 +24,6 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
         public override async void Enter()
         {
-            Debug.Log("Check state");
             var foundMatches = await IsMatchFound();
             if (foundMatches)
             {
@@ -61,9 +59,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             verticalMatchesList = verticalMatchesList.Where(match => match.Count > 2).ToList();
             horizontalMatchesList = horizontalMatchesList.Where(match => match.Count > 2).ToList();
             
-            _transitionContext.SetMatches(verticalMatchesList, horizontalMatchesList);
-            //Debug.Log("Vertical matches amount: " + verticalMatchesList.Count);
-            //Debug.Log("Horizontal matches amount: " +horizontalMatchesList.Count);
+            _transitionContext.CacheStackedMatches(verticalMatchesList, horizontalMatchesList);
             
             await ShakeFoundMatches(verticalMatchesList, horizontalMatchesList);
 

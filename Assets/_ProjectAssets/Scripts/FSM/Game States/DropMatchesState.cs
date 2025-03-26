@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using _ProjectAssets.Scripts.Structures;
 using _ProjectAssets.Scripts.View;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using Zenject;
 
 namespace _ProjectAssets.Scripts.FSM.Game_States
@@ -44,6 +43,12 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                     {
                         currentElementPosData.ColumnIndex = j;
                         currentElementPosData.RowIndex = i;
+                        
+                        _gameFieldView.ChangeElementPositionBeforeDrop(currentElementPosData, dropTargetRow);
+                        
+                        _gameFieldView.MatchElements[dropTargetRow, currentElementPosData.ColumnIndex] = _gameFieldView.MatchElements[currentElementPosData.RowIndex, currentElementPosData.ColumnIndex];
+                        _gameFieldView.MatchElements[currentElementPosData.RowIndex, currentElementPosData.ColumnIndex] = null;
+                        
                         dropTasks.Add( _gameFieldView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow));
                     }
                 }
@@ -71,7 +76,13 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
 
                     currentElementPosData.RowIndex = i;
                     currentElementPosData.ColumnIndex = j;
-                    dropTasks.Add(_gameFieldView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow, false));
+                    
+                    _gameFieldView.ChangeElementPositionBeforeDrop(currentElementPosData, dropTargetRow, false);
+                    
+                    _gameFieldView.MatchElements[dropTargetRow, currentElementPosData.ColumnIndex] = _gameFieldView.ReservedElements[currentElementPosData.RowIndex, currentElementPosData.ColumnIndex];
+                    _gameFieldView.ReservedElements[currentElementPosData.RowIndex, currentElementPosData.ColumnIndex] = null;
+                    
+                    dropTasks.Add(_gameFieldView.AnimateSingleElementDrop(currentElementPosData, dropTargetRow));
                 }
             }
             
@@ -82,7 +93,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         {
             for (int i = _gameFieldView.MatchElements.GetLength(0) - 1; i > initialElementRow; i--)
             {
-                if (_gameFieldView.MatchElements[i, column] == null)
+                if (!_gameFieldView.MatchElements[i, column])
                 {
                     return i;
                 }

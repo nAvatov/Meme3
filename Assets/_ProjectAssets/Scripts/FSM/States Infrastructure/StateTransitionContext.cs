@@ -20,7 +20,7 @@ namespace _ProjectAssets.Scripts.FSM.States_Infrastructure
 
         public int ComboAmount { get; set; }
 
-        public void SetMatches(List<List<ArrayPositionData>> vertical, List<List<ArrayPositionData>> horizontal)
+        public void CacheStackedMatches(List<List<ArrayPositionData>> vertical, List<List<ArrayPositionData>> horizontal)
         {
             _verticalMatchesList = vertical;
             _horizontalMatchesList = horizontal;
