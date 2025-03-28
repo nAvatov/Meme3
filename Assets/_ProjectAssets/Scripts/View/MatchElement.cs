@@ -14,7 +14,7 @@ namespace _ProjectAssets.Scripts.Instances
         [SerializeField] private Image _typeImage;
         [SerializeField] private Image _background;
         [SerializeField] private TextMeshProUGUI _posText;
-        public ElementType _elementType;
+        private ElementType _elementType;
 
         public ArrayPositionData PositionData { get; private set; }
         public ElementType ElementType => _elementType;

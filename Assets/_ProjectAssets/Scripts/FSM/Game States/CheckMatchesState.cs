@@ -25,6 +25,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         public override async void Enter()
         {
             var foundMatches = await IsMatchFound();
+            
             if (foundMatches)
             {
                 _fsm.ChangeState<DestroyMatchedElementsState>();
