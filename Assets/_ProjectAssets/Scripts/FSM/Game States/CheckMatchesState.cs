@@ -47,12 +47,12 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                 {
                     if (!IsElementWasIncludedInMatchBefore(verticalMatchesList, i, j))
                     {
-                        verticalMatchesList.Add(CheckMatchFigureVertical(i, j));
+                        verticalMatchesList.Add(FindVerticalMatchSequence(i, j));
                     }
 
                     if (!IsElementWasIncludedInMatchBefore(horizontalMatchesList, i, j))
                     {
-                        horizontalMatchesList.Add(CheckMatchFigureHorizontal(i, j));
+                        horizontalMatchesList.Add(FindHorizontalMatchSequence(i, j));
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             return matchesList.Exists(match => match.Exists(element => element.RowIndex == i && element.ColumnIndex == j));
         }
 
-        private List<ArrayPositionData> CheckMatchFigureHorizontal(int i, int j)
+        private List<ArrayPositionData> FindHorizontalMatchSequence(int i, int j)
         {
             ElementType elementType = _gameFieldView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();
@@ -131,7 +131,7 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
             return matchedElements;
         }
 
-        private List<ArrayPositionData> CheckMatchFigureVertical(int i, int j)
+        private List<ArrayPositionData> FindVerticalMatchSequence(int i, int j)
         {
             ElementType elementType = _gameFieldView.MatchElements[i, j].ElementType;
             List<ArrayPositionData> matchedElements = new List<ArrayPositionData>();

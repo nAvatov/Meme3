@@ -10,20 +10,27 @@ namespace _ProjectAssets.Scripts.Installers
     public class InfrastructureInstaller : MonoInstaller
     {
         private System.Random _generationRnd = new System.Random();
+
         public override void InstallBindings()
         {
-            Container.Bind<StateFactory>().AsSingle();
-            Container.Bind<StateTransitionContext>().AsSingle();
             Container.BindInstance(_generationRnd).AsSingle();
-
+            
+            InstallStateInfrastructure();
             InstallSignals();
         }
 
         public void InstallSignals()
         {
             SignalBusInstaller.Install(Container);
-            
+
             Container.DeclareSignal<SwapSignal>();
         }
+
+        private void InstallStateInfrastructure()
+        {
+            Container.Bind<StateFactory>().AsSingle();
+            Container.Bind<StateTransitionContext>().AsSingle();
+        }
+    
     }
 }

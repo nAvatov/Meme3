@@ -7,10 +7,11 @@ namespace _ProjectAssets.Scripts.Installers
 {
     public class CommonInstaller : MonoInstaller
     {
-        [FormerlySerializedAs("_gridView")] [SerializeField] private GameFieldView _gameFieldView;
+        [SerializeField] private GameFieldView _gameFieldView;
         public override void InstallBindings()
         {
             Container.BindInstance(_gameFieldView).AsSingle();
+            Container.Bind<PlayabilityCheckModule>().AsSingle();
         }
     }
 }
