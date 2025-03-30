@@ -14,18 +14,21 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
         private GameFieldView _gameFieldView;
         private FSMachine _fsm;
         private System.Random _generationRnd;
+        private PlayabilityCheckModule _playabilityCheckModule;
         
         [Inject]
-        public void Construct(GameFieldView gameFieldView, FSMachine fsm, System.Random generationRnd)
+        public void Construct(GameFieldView gameFieldView, FSMachine fsm, System.Random generationRnd, PlayabilityCheckModule playabilityCheckModule)
         {
             _gameFieldView = gameFieldView;
             _fsm = fsm;
             _generationRnd = generationRnd;
+            _playabilityCheckModule = playabilityCheckModule;
         }
         
         public override async void Enter()
         {
             _gameFieldView.HandleFieldInteractability(false);
+            _gameFieldView.Spawn();
             
             GenerateElements();
             await CalculateDropOrder();
@@ -48,9 +51,10 @@ namespace _ProjectAssets.Scripts.FSM.Game_States
                         generation[i, j] = (ElementType)_generationRnd.Next(0, upperRandomBound);
                     }
                 }
-            } while (!CheckGenerationValidity());
-            
-            _gameFieldView.Spawn(generation);
+
+                _gameFieldView.SetTypeGeneration(generation);
+                
+            } while (!_playabilityCheckModule.IsGameFieldPlayable(_gameFieldView.MatchElements));
         }
 
         private bool CheckGenerationValidity()

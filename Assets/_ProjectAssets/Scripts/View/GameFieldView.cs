@@ -49,29 +49,39 @@ namespace _ProjectAssets.Scripts.View
             SpawnSpotsArray = CollectionWrapper.WrapListToTwoDimArray(_spawnSpots, _fieldColumns);
         }
 
-        public void Spawn(ElementType[,] elementsMatrix)
+        public void Spawn()
         {
-            if (elementsMatrix != null)
-            {
-                int k = 0;
-                _matchElements = new MatchElement[elementsMatrix.GetLength(0), elementsMatrix.GetLength(1)];
-                _reservedElements = new MatchElement[elementsMatrix.GetLength(0), elementsMatrix.GetLength(1)];
+            int k = 0;
+            _matchElements = new MatchElement[SpawnSpotsArray.GetLength(0), SpawnSpotsArray.GetLength(1)];
+            _reservedElements = new MatchElement[SpawnSpotsArray.GetLength(0), SpawnSpotsArray.GetLength(1)];
             
-                for (int i = 0; i < elementsMatrix.GetLength(0); i++)
+            for (int i = 0; i < SpawnSpotsArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < SpawnSpotsArray.GetLength(1); j++)
                 {
-                    for (int j = 0; j < elementsMatrix.GetLength(1); j++)
-                    {
-                        _matchElements[i, j] = Instantiate(_matchElementPrefab, _spawnSpots[k].transform);
-                        _matchElements[i, j].SetElementType(elementsMatrix[i, j]);
-                        _matchElements[i, j].SetPositionData(new ArrayPositionData(i, j));
-                        _matchElements[i, j].GetComponent<DragAndDrop>().Initialize(_swapLayer, _signalBus);
-                        k++;
-                    }
+                    _matchElements[i, j] = Instantiate(_matchElementPrefab, _spawnSpots[k].transform);
+                    _matchElements[i, j].SetPositionData(new ArrayPositionData(i, j));
+                    _matchElements[i, j].GetComponent<DragAndDrop>().Initialize(_swapLayer, _signalBus);
+                    k++;
                 }
             }
         
             TargetSpotsArray = CollectionWrapper.WrapListToTwoDimArray(_targetSpots, _fieldColumns);
             _dropAnimRnd = new Random();
+        }
+
+        public void SetTypeGeneration(ElementType[,] elementsMatrix)
+        {
+            if (elementsMatrix.Length == _matchElements.Length)
+            {
+                for (int i = 0; i < _matchElements.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _matchElements.GetLength(1); j++)
+                    {
+                        _matchElements[i, j].SetElementType(elementsMatrix[i, j]);
+                    }
+                }   
+            }
         }
 
         public async UniTask AnimateInitialDrop(List<ElementDropTicket> rowOfShuffledElements)
